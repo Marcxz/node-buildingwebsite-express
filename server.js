@@ -15,7 +15,14 @@ app.use(cookieSession({
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, './views'));
 
+app.locals.siteName = 'ROUX Meetups';
+
 app.use(express.static(path.join(__dirname, './static')));
+
+app.use((req, res, next) => {
+    res.locals.someVariable = 'This is a local variable';
+    return next();
+});
 
 app.use('/', routes);
 

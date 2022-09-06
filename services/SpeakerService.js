@@ -98,7 +98,7 @@ class SpeakerService {
    */
   async getList() {
     const data = await this.getData();
-      data.map(speaker => {
+     return data.map(speaker => {
       return {
         name: speaker.name,
         shortname: speaker.shortname,
