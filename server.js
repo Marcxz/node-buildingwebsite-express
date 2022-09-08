@@ -4,6 +4,8 @@ const app = express();
 const port = 3000;
 const routes = require('./routes')
 const cookieSession = require('cookie-session');
+const createError = require('http-errors');
+const { response } = require('express');
 
 app.set('trust proxy', 1) // trust first proxy')
 
@@ -26,6 +28,19 @@ app.use((req, res, next) => {
 
 app.use('/', routes);
 
+
+app.use((req, res, next) => {
+    return next(createError(404, 'File not found'));
+});
+
+app.use((err, req, res, next) => {
+    res.locals.message = err.message;
+    const status = err.status || 500;
+    res.locals.status = status;
+    res.status(status);
+    return res.render('layout/index', { pageTitle: 'An error appears', status: status, message: err.message, template: 'error'});
+
+})
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 })
